@@ -2,22 +2,26 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, current_user, login_required
+
+
+
 # user Defined imports
 from .models import User
 from . import note_db
+from .checker import check_string
+
+
 auth = Blueprint('auth',__name__)
 
 # a database query that login a user
 @auth.route('/login', methods=['POST', 'GET'])
 def login():
-    data = request.form
-    print(data)
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
         if not '@' in email or not '.' in email:
-            flash('Your email does not contain either @ or . after the email service',category="error")
-        elif len(password) < 7:
+            flash('It is not a correct email format!',category="error")
+        elif len(password) < 7 and check_string(password):
             flash('password length is less than 7!', category="error")
         else:
             user = User.query.filter_by(email= email).first()
@@ -62,13 +66,13 @@ def signup():
                 flash('First name can not be less than 1 character',category="error")
             elif len(last_name) < 2:
                 flash('Last name can not be less than 1 character',category="error")
-            elif password1 != c_password or  len(password1) < 7:
+            elif password1 != c_password or  len(password1) < 7 or not check_string(password1):
                 flash('Password does not match! or password length is less than 7!', category="error")
             else:
                 new_user = User(email = email, first_name=first_name, last_name=last_name,password=generate_password_hash( password1, method='pbkdf2:sha256'))
                 note_db.session.add(new_user)
                 note_db.session.commit()
                 flash("Account successfully created!", category="success")
-                return redirect(url_for('views.home'))
+                return redirect(url_for('views.notes'))
     
     return render_template("signup.html", user = current_user)
