@@ -1,0 +1,11 @@
+<div class="d-flex flex-column bg-purple-dark border-right" id="wrapper">   
+    <div class="d-flex flex-column h-50 m-4 justify-content-start text-body  align-center rounded text-white">
+        <img class="rounded-circle h-20 w-20" src="{{url_for('static', filename='profile.jpeg')}}" alt=" profile">
+        <p class="text-center text-secondary p-4 h4">{{ user.first_name + " " + user.last_name}}</p>
+        <a href="/profile/user/update/{{user.id}}" class="btn btn-success">Edit</a>
+    </div>
+    <ul class="list-group list-unstyled d-inline text-center border">
+        <li class="p-2"><a class="list-group-item hover-shadow list-group-item-action active" href="/profile/profile">Users</a></li>
+        <li class="p-2"><a class="list-group-item hover-shadow  list-group-item-action" href="/profile/get-all-notes">Notes</a></li>
+    </ul>
+</div>

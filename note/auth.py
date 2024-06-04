@@ -24,12 +24,15 @@ def login():
         elif len(password) < 7 and check_string(password):
             flash('password length is less than 7!', category="error")
         else:
-            user = User.query.filter_by(email= email).first()
+            user = User.query.filter_by(email = email).first()
             if user:
                 if check_password_hash(user.password, password):
                     #flash('Logged in successfully!', category='success')
                     login_user(user, remember=True)
-                    return redirect(url_for('views.notes'))
+                    if user.is_admin:
+                        return redirect(url_for('users.user_profile')) 
+                    else:
+                        return redirect(url_for( 'views.notes'))
                 else:
                     flash('Either email or password is incorrect. Try again!', category='error')
             else:

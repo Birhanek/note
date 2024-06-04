@@ -10,69 +10,73 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-    {%  include "navbar.html" %}
-    <div class="d-flex" id="wrapper">
-        <div class="d-none d-xl-flex flex-column h-50 m-4 justify-content-start  align-center bg-dark rounded text-white">
-            <img class="rounded-circle h-20 w-20" src="{{url_for('static', filename='profile.jpeg')}}" alt=" profile">
-            <p class="text-center p-4 h4">{{ user.first_name + " " + user.last_name}}</p>
-        </div>
-        <div class="container mt-5">
-            {%  if is_updating %}
-                <h1>Updating Note </h1>
-                <form  method="POST" action="/note/update/{{noting.id}}/update">
-                    <!-- Description -->
-                    <div class="form-group">
-                        <label for="title">Title:</label>
-                        <input type="text" class="form-control" id="title" name="title" value="{{noting.title}}" required>
-                    </div> 
-                    <div class="form-group">
-                        <label for="description">Description:</label>
-                        <textarea type="text" class="form-control" id="description"   name="description" required>{{noting.description}}</textarea>
-                    </div> 
-                    <!-- Submit Button -->
-                    <button type="submit" class="btn btn-success">Save Note</button>
-                </form>
-    
-            {% else %}
-                <h1>Create a New Note</h1>
-                <form  method="POST">
-                    <!-- Description -->
-                    <div class="form-group">
-                        <label for="title">Title:</label>
-                        <input type="text" class="form-control" id="title" name="title" required>
-                    </div> 
-                    <div class="form-group">
-                        <label for="description">Description:</label>
-                        <textarea type="text" class="form-control" id="description" name="description" required></textarea>
-                    </div> 
-                    <!-- Submit Button -->
-                    <button type="submit" class="btn btn-primary">Save Note</button>
-                </form>
-            {% endif %}
-    
-            <ul class="list-group list-group-flush mt-3" id="Notes">
-                <h1 class="text-decoration-underline">Notes</h1>
-                {% for note in user.notes %}
-                    <article class="card user-select-auto p-1">
-                        <li class="list-group-item card-body">
-                            <div class="d-flex flex-row justify-content-between text-decoration-underline">
-                                <h4 class="card-title">{{note.title}}</h4>
-                                <p class="bg-default rounded text-grey p-1">{{ note.date.strftime('%d %B %Y') }}</p>
-                            </div>
-                           
-                            <p class="card-text">{{ note.description}}</p>
-                            <a href="/note/{{note.id}}/update" class="btn btn-primary">Edit</a>
-                            <a href="/note/{{note.id}}/delete" class="btn btn-danger">Delete</a>
-                        </li>
-                    </article>
-                {% endfor%}
-    
-            </ul>
-        </div>
-    </div>
+            {%  include "navbar.html" %}
+            <div class="d-flex" id="wrapper">
+            
+                <div class="d-none d-xl-flex flex-column h-50 m-4 justify-content-start  align-center bg-dark rounded text-white">
+                    <img class="rounded-circle h-20 w-20" src="{{url_for('static', filename='profile.jpeg')}}" alt=" profile">
+                    <p class="text-center p-4 h4">{{ user.first_name + " " + user.last_name}}</p>
+                </div>
+        
+                <div class="container mt-5">
+                    {%  if is_updating %}
+                        <h1>Updating Note </h1>
+                        <form  method="POST" action="/note/update/{{noting.id}}/update">
+                            <!-- Description -->
+                            <div class="form-group">
+                                <label for="title">Title:</label>
+                                <input type="text" class="form-control" id="title" name="title" value="{{noting.title}}" required>
+                            </div> 
+                            <div class="form-group">
+                                <label for="description">Description:</label>
+                                <textarea type="text" class="form-control" id="description"   name="description" required>{{noting.description}}</textarea>
+                            </div> 
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-success">Save Note</button>
+                        </form>
+            
+                    {% else %}
+                        <h1>Create a New Note</h1>
+                        <form  method="POST">
+                            <!-- Description -->
+                            <div class="form-group">
+                                <label for="title">Title:</label>
+                                <input type="text" class="form-control" id="title" name="title" required>
+                            </div> 
+                            <div class="form-group">
+                                <label for="description">Description:</label>
+                                <textarea type="text" class="form-control" id="description" name="description" required></textarea>
+                            </div> 
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-primary">Save Note</button>
+                        </form>
+                    {% endif %}
+            
+                    <ul class="list-group list-group-flush mt-3" id="Notes">
+                        <h1 class="text-decoration-underline">Notes</h1>
+                        {% for note in user.notes %}
+                            <article class="card user-select-auto p-1">
+                                <li class="list-group-item card-body">
+                                    <div class="d-flex flex-row justify-content-between text-decoration-underline">
+                                        <h4 class="card-title">{{note.title}}</h4>
+                                        <p class="bg-default rounded text-grey p-1">{{ note.date.strftime('%d %B %Y') }}</p>
+                                    </div>
+                                
+                                    <p class="card-text">{{ note.description}}</p>
+                                    <a href="/note/{{note.id}}/update" class="btn btn-primary">Edit</a>
+                                    <a href="/note/{{note.id}}/delete" class="btn btn-danger">Delete</a>
+                                </li>
+                            </article>
+                        {% endfor%}
+            
+                    </ul>
+                </div>
+            </div>
+            {% include "footer.html" %}
 
 
-    {% include "footer.html" %}
+
+    
 <script 
     type="text/javascript"
     src="{{url_for('static', filename='index.js')}}">

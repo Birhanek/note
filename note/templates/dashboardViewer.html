@@ -1,0 +1,54 @@
+<div class="container mt-1">
+    {% if is_updating %}
+    <div class="card-body">
+        <form method="POST" action="/profile/user/update/{{retrieved.id}}/123456098">
+            <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" class="form-control" id="firstName" value="{{retrieved.first_name}}" name="firstName" required>
+            </div>
+            <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" class="form-control" value="{{retrieved.last_name}}" id="lastName" name="lastName" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" value="{{retrieved.password}}" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-success">Update</button>
+        </form>
+    </div>
+    {% else %}
+        {% if category == "users" %}
+            <!-- Table starts here -->
+            <table class="table table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">First Name</th>
+                        <th scope="col">Last Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Is Admin</th>
+                        <th scope="colgroup" colspan="2"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in all_note_users %}
+                    <tr>
+                        <th scope="row">{{ user.id  }}</th>
+                        <td>{{ user.first_name }}</td>
+                        <td>{{ user.last_name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.is_admin }}</td>
+                        <td><a href="/profile/user/delete/{{user.id}}" class="btn btn-danger">Delete</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <!-- Table ends here -->
+        {% elif category == "notes" %}
+            {% include "adminNotes.html" %}
+        {% endif %}
+
+    {% endif %}
+    
+</div>

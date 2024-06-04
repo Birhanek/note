@@ -14,7 +14,7 @@
     <div class="d-flex" id="wrapper">
 
         <!-- Sidebar -->
-        <div class="bg-light border-right" id="sidebar-wrapper">
+        <div class="bg-light border-right w-25" id="sidebar-wrapper">
             <div class="sidebar-heading">Stationery </div>
             <div class="list-group list-group-flush">
                 <a href="#" class="list-group-item list-group-item-action bg-light">Overview</a>
@@ -23,16 +23,44 @@
         </div>
         <!-- /#sidebar-wrapper -->
 
-        <!-- Page Content -->
-        <div id="page-content-wrapper">
-
-            <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-                <!-- Navbar content -->
-            </nav>
-
+        <!-- Page Content , id="page-content-wrapper"-->
+        <div class="w-75">
             <div class="container-fluid">
-                <h1 class="mt-4">Note Information</h1>
-                <p>This is a note about the importance of having a good set of stationery for effective learning and creativity.</p>
+                <div class="row">
+                    <div class="col-md-6 col-lg-6 border p-3">
+                        <h1 class="mt-4 w-100 underline">File Extraction </h1>
+                        <form class="w-100"  method="POST" action="/uploading" enctype="multipart/form-data">
+                            <!-- Description -->
+                            <div class="form-group">
+                                <label for="startPage">Start Page</label>
+                                <input type="number" class="form-control" id="startPage" name="startPage" required>
+                            </div> 
+                            <div class="form-group">
+                                <label for="endPage">End Page</label>
+                                <input type="number" class="form-control" id="endPage" name="endPage" required/>
+                            </div> 
+                            <div class="form-group">
+                                <label for="upload">File Upload</label>
+                                <input type="file" class="form-control" id="upload" name="upload" required/>
+                            </div> 
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-primary">Extract</button>
+                        </form>
+                    </div>
+
+                    <div class="col-md-6 col-lg-6 w-100 p-3">
+                        {% if file_content %}
+                        <h1> You uploaded the file successfully.</h1>
+                        <p> You are going to extract the file from {{ startPage }} to  {{ endPage}}</p>
+                        <form action="/extracting_downloading" method="GET">
+                            <input class="btn btn-primary" type="submit" value="Extract and Download">
+                        </form>
+                        {% else %}
+                        <h1>No File</h1>
+                        {% endif %}
+                    </div>
+                </div>
+                <!--<p>This is a note about the importance of having a good set of stationery for effective learning and creativity.</p>-->
                 <!-- More content -->
             </div>
         </div>

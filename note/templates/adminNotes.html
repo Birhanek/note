@@ -1,0 +1,18 @@
+<ul class="list-group list-group-flush mt-3" id="Notes">
+    <h1 class="text-decoration-underline">Notes</h1>
+    {% for note in notes %}
+        <article class="card user-select-auto p-1">
+            <li class="list-group-item card-body">
+                <div class="d-flex flex-row justify-content-between text-decoration-underline">
+                    <h4 class="card-title">{{note.title}}</h4>
+                    <p class="bg-default rounded text-grey p-1">{{ note.date.strftime('%d %B %Y') }}</p>
+                </div>
+               
+                <p class="card-text">{{ note.description}}</p>
+                <a href="/note/{{note.id}}/update" class="btn btn-primary">Edit</a>
+                <a href="/note/{{note.id}}/delete" class="btn btn-danger">Delete</a>
+            </li>
+        </article>
+    {% endfor%}
+
+</ul>

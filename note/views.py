@@ -1,20 +1,50 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for, send_file
 from flask_login import  current_user, login_required
-import json
+from datetime import datetime
+from pathlib import Path
 
 from .models import Note
 from . import note_db
+from .file_cropper import file_cropping
 
 
 views = Blueprint('views',__name__)
 
 update_controller = False
+
 # home
 @views.route('/')
 def home():
+
     return render_template("home.html", user = current_user)
 
-# creating note
+# Uploading  a PDF file
+@views.route('/uploading', methods=['POST', 'GET'])
+def uploading_file():
+    global start_page
+    global end_page
+    global uploaded_file
+    if request.method == 'POST':
+        start_page = int(request.form.get('startPage'))
+        end_page = int(request.form.get('endPage'))
+        file = request.files['upload']
+
+        uploaded_file = file.filename
+
+        file.save(uploaded_file)
+
+    return render_template('home.html', user=current_user, startPage = start_page, endPage = end_page, file_content = file )
+
+# Cropping and downloading file
+@views.route('/extracting_downloading',methods =['POST','GET'])
+def extracting_downloading():
+    file_cropping(start_page, end_page, file=uploaded_file)
+
+    file_name =  uploaded_file.split('.')[0] + "- cropped.pdf"
+
+    return send_file(file_name, as_attachment =True)
+
+
 @views.route('/notes', methods =['POST', 'GET'])
 @login_required
 def notes():

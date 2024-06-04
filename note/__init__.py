@@ -22,9 +22,11 @@ def create_app():
 
     from .views import views
     from .auth import auth
+    from .profile import profile
 
     app.register_blueprint(views,url_prefix = '/')
     app.register_blueprint(auth,url_prefix = '/auth/')
+    app.register_blueprint(profile, url_prefix ='/profile/')
 
     from .models import User, Note
 
@@ -44,6 +46,7 @@ def create_database(app):
     if not path.exists('note/' + DB_Name):
         with app.app_context():
             note_db.create_all()
+            
             print('Database created!')
 
     
