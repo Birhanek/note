@@ -26,18 +26,24 @@ def uploading_file():
     global uploaded_file
     if request.method == 'POST':
         start_page = int(request.form.get('startPage'))
+
         end_page = int(request.form.get('endPage'))
-        file = request.files['upload']
+        if start_page or end_page < 0 or start_page > end_page:
+            flash('Either start or end page is below zero (0) or the start page is bigger than the end page', category="error")
+            return redirect(url_for('views.home'))
+        else:
+            file = request.files['upload']
 
-        uploaded_file = file.filename
+            uploaded_file = file.filename
 
-        file.save(uploaded_file)
+            file.save(uploaded_file)
 
     return render_template('home.html', user=current_user, startPage = start_page, endPage = end_page, file_content = file )
 
 # Cropping and downloading file
 @views.route('/extracting_downloading',methods =['POST','GET'])
 def extracting_downloading():
+    
     file_cropping(start_page, end_page, file=uploaded_file)
 
     file_name =  uploaded_file.split('.')[0] + "- cropped.pdf"
@@ -45,6 +51,7 @@ def extracting_downloading():
     return send_file(file_name, as_attachment =True)
 
 
+# retrieving all notes for the user who logged in
 @views.route('/notes', methods =['POST', 'GET'])
 @login_required
 def notes():
@@ -67,17 +74,19 @@ def notes():
 @login_required
 def delete_note(id):
 
-    note = note_db.get_or_404(Note,id)
+    # note = note_db.get_or_404(Note, id)
+    note = Note.query.filter_by(id=id).first_or_404()
     note_db.session.delete(note)
     note_db.session.commit()
 
     return redirect(url_for('views.notes'))
 
-# retrieving note
+# retrieving single note
 @views.route('/note/<int:id>/update')
 @login_required
 def update_note(id):
-    note = note_db.get_or_404(Note, id)
+    # note = note_db.get_or_404(Note, id)
+    note = Note.query.filter_by(id=id).first_or_404()
   
     update_controller = True
     return render_template('notes.html', user=current_user, noting = note, is_updating=update_controller)
@@ -86,7 +95,9 @@ def update_note(id):
 @views.route('/note/update/<int:id>/update',methods=['POST'])
 @login_required
 def updating(id):
-    note = note_db.get_or_404(Note, id)
+    # note = note_db.get_or_404(Note, id)
+    note = Note.query.filter_by(id=id).first_or_404()
+
     global update_controller
     description = request.form.get('description')
     title = request.form.get('title')

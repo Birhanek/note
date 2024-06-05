@@ -5,7 +5,7 @@ def file_cropping(start, end, file):
     input_file = PdfFileReader(open(file,'rb'))
     output_file = PdfFileWriter()
 
-    streaming_file = open("note\\" + file.split('.')[0] + "- cropped.pdf", 'wb')
+    streaming_file = open(file.split('.')[0] + "- cropped.pdf", 'wb')
 
     for page_number in range(start, end + 1):
         page = input_file.getPage(page_number)

@@ -13,7 +13,7 @@ class User(note_db.Model, UserMixin):
     password = note_db.Column(note_db.String(200))
     first_name = note_db.Column(note_db.String(100))
     last_name = note_db.Column(note_db.String(100))
-    is_admin = note_db.Column(note_db.Boolean, default = True)
+    is_admin = note_db.Column(note_db.Boolean, default = False)
     notes = note_db.relationship('Note')
 
 

@@ -21,10 +21,11 @@ def user_profile():
     mapper = "users"
     return render_template("dashboard.html", category = mapper, user=current_user, all_note_users = all_users, is_updating = update_controller)
 
+# Preparing a user to be updated
 @profile.route('/user/update/<int:id>')
 @login_required
 def get_user_to_update(id):
-    my_user = note_db.get_or_404(User,id)
+    my_user = User.query.filter_by(id=id).first_or_404()
     update_controller = True
 
     return render_template('dashboard.html', user = current_user, category=mapper, retrieved = my_user, is_updating=update_controller)
@@ -32,7 +33,7 @@ def get_user_to_update(id):
 @profile.route('/user/update/<int:id>/<int:word>', methods=['POST'])
 @login_required
 def user_to_update(id, word):
-    my_user = note_db.get_or_404(User,id)
+    my_user = User.query.filter_by(id=id).first_or_404()
     global update_controller
     first_name = request.form.get('firstName')
     last_name = request.form.get('lastName')
@@ -52,11 +53,21 @@ def user_to_update(id, word):
         update_controller = False
     return redirect (url_for("users.user_profile"))
     
+# deleting a single note
+@profile.route('/user/delete/<int:id>')
+@login_required
+def delete_note(id):
 
+    # note = note_db.get_or_404(Note, id)
+    delete_user = User.query.filter_by(id=id).first_or_404()
+    note_db.session.delete(delete_user)
+    note_db.session.commit()
+
+    return redirect(url_for('users.user_profile'))
 
         
 
-
+# Fetch all notes
 @profile.route('/get-all-notes')
 @login_required
 def get_all_notes():
