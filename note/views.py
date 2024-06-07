@@ -15,7 +15,7 @@ update_controller = False
 # home
 @views.route('/')
 def home():
-
+    # /blogs/home.html
     return render_template("home.html", user = current_user)
 
 # Uploading  a PDF file
@@ -26,9 +26,10 @@ def uploading_file():
     global uploaded_file
     if request.method == 'POST':
         start_page = int(request.form.get('startPage'))
-
+        print(start_page)
         end_page = int(request.form.get('endPage'))
-        if start_page or end_page < 0 or start_page > end_page:
+        print(end_page)
+        if start_page < 0 or end_page < 0 or start_page > end_page:
             flash('Either start or end page is below zero (0) or the start page is bigger than the end page', category="error")
             return redirect(url_for('views.home'))
         else:
@@ -46,7 +47,9 @@ def extracting_downloading():
     
     file_cropping(start_page, end_page, file=uploaded_file)
 
-    file_name =  uploaded_file.split('.')[0] + "- cropped.pdf"
+
+    file_name = str(Path.cwd()) + "\\" + uploaded_file.split('.')[0] + "- cropped.pdf"
+
 
     return send_file(file_name, as_attachment =True)
 

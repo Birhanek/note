@@ -23,10 +23,12 @@ def create_app():
     from .views import views
     from .auth import auth
     from .profile import profile
+    from .blogs import blogs
 
     app.register_blueprint(views,url_prefix = '/')
     app.register_blueprint(auth,url_prefix = '/auth/')
     app.register_blueprint(profile, url_prefix ='/profile/')
+    app.register_blueprint(blogs, url_prefix='/news/')
 
     from .models import User, Note
 

@@ -6,15 +6,17 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
         {% if user.is_authenticated%}
-            <a class="nav-item nav-link active" href="/">ገዛ  <span class="sr-only">(current)</span></a>
+            <a class="nav-item nav-link active" href="/">ገዛ <span class="sr-only">(current)</span></a>
             {% if user.is_admin %}
             <a class="nav-item nav-link active" href="/profile/profile">Profile</a>
             {% else %}
             <a class="nav-item nav-link" href="/notes">Notes</a>
+            <a class="nav-item nav-link" href="/news">News</a>
             {% endif %}
             <a class="nav-item nav-link" href="/auth/logout">Sign out</a>
         {% else %}
             <a class="nav-item nav-link active" href="/">ገዛ  <span class="sr-only">(current)</span></a>
+            <a class="nav-item nav-link" href="/news">News</a>
             <a class="nav-item nav-link" href="/auth/login">Login</a>
             <a class="nav-item nav-link" href="/auth/signup">Signup</a>
         {% endif %}
