@@ -3,7 +3,6 @@ from flask_login import  current_user, login_required
 
 from .models import Note
 from . import note_db
-from .file_cropper import file_cropping
 
 
 blogs = Blueprint('blogs',__name__)

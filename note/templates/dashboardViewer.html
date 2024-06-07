@@ -47,6 +47,8 @@
             <!-- Table ends here -->
         {% elif category == "notes" %}
             {% include "adminNotes.html" %}
+        {% elif category == "categories" %}
+            {% include "/blogs/adminCategory.html" %}
         {% endif %}
 
     {% endif %}

@@ -1,0 +1,57 @@
+<div class="container mt-5">
+    {%  if category_updating %}
+        <h1>Update Category</h1>
+        <form  method="POST" action="/note/update/{{noting.id}}/update">
+            <!-- Description -->
+            <div class="form-group">
+                <label for="title">Name:</label>
+                <input type="text" class="form-control" id="name" name="name" value="{{category.category_name}}" required>
+            </div> 
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <input type="text" class="form-control" id="description"   name="description" value="{{category.category_description}}" required/>
+            </div> 
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-success">Update category</button>
+        </form>
+
+    {% else %}
+        <h1>Create Category</h1>
+        <form  method="POST" action="/category/category-added">
+            <!-- Description -->
+            <div class="form-group">
+                <label for="title">Category name:</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div> 
+            <div class="form-group">
+                <label for="description">Category description:</label>
+                <textarea type="text" class="form-control" id="description" name="description" required></textarea>
+            </div> 
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary">Create</button>
+        </form>
+    {% endif %}
+
+    <div class="list-group list-group-flush mt-3" id="Notes">
+        <h1 class="text-decoration-underline">Categories</h1>
+        <table class="table table-bordered table-responsive">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Category name</th>
+                    <th scope="col">Category description</th>
+                    <th scope="colgroup" colspan="2"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for category in all_catagories %}
+                <tr>
+                    <td>{{ category.category_name }}</td>
+                    <td>{{ category.category_description }}</td>
+                    <td><a href="/category/update/{{category.category_id}}" class="btn btn-primary">Edit</a></td>
+                    <td><a href="/category/delete/{{category.category_id}}" class="btn btn-danger">Delete</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div> 
+</div>

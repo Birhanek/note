@@ -37,7 +37,7 @@ class Posts(note_db.Model):
     author_id = note_db.Column(note_db.Integer, note_db.ForeignKey('user.id'))
 
 class Comments(note_db.Model):
-    comment_id = note_db.Column(note_db.Integer, primary_key=True)
+    comment_id = note_db.Column(note_db.Integer,autoincrement=True, primary_key=True)
     comment = note_db.Column(note_db.Text, nullable=False)
     time_stamp = note_db.Column(note_db.DateTime(timezone=True), default=func.now())
     post_id = note_db.Column(note_db.Integer, note_db.ForeignKey('posts.post_id'))
@@ -45,7 +45,7 @@ class Comments(note_db.Model):
 
 # Categories information skeleton
 class Categories(note_db.Model):
-    category_id = note_db.Column(note_db.Integer, primary_key=True)
+    category_id = note_db.Column(note_db.Integer,autoincrement=True, primary_key=True)
     category_name = note_db.Column(note_db.String(200), nullable = False)
     category_description = note_db.Column(note_db.String(500))
 
