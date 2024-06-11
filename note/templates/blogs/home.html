@@ -3,13 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>blogs</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
 </body>
     {% include "navbar.html" %}
-    <h1>Welcome to the battle of Guraae</h1>
+    <div class="d-flex" id="wrapper">
+
+        <!-- Sidebar -->
+        <div class="bg-light border-right w-25" id="sidebar-wrapper">
+            <div class="sidebar-heading">Stationery </div>
+            <div class="list-group list-group-flush">
+                <a href="#" class="list-group-item list-group-item-action bg-light">Overview</a>
+                <!-- Other sidebar items -->
+            </div>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content , id="page-content-wrapper"-->
+        <div class="w-75 mt-2">
+            {% if not is_on_detail %}
+            <div class="container">
+                <div class="row">
+                    {% for post in approved_posts %}
+                    <div class="col-sm-12 col-md-12 col-lg-12 py-2 w-100">
+                        <article class="card rounded">
+                            <div class="d-flex justify-content-start py-1">
+                                <img class="rounded-circle pl-1 img-thumbnail" width="40" height="40" src='{{url_for('static', filename="profile.jpeg")}}' alt="">
+                                <h6 class="px-2 text-secondary">{{post['author'].capitalize()}} <em class="pl-1">.</em></h6>
+                                <p class="fst-italic">{{ post['data'].publish_date.strftime('%d %B, %Y')}}</p>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">{{ post['data'].title}}</h5>
+                                <p class="card-text">{{ post['data'].content[:200]}} ... </p>
+                                <a href="/posts/get-post-detail/{{post['data'].post_id}}/{{range(1, 51) | random}}" class="btn btn-primary">See more</a>
+                            </div>
+                        </article>
+                    </div>
+                    {% endfor %}
+              </div>
+            </div>
+            {% else %}
+        <!-- /#page-content-wrapper -->
+            <article>
+                <div class="d-flex justify-content-start py-1">
+                    <img class="rounded-circle pl-1 img-thumbnail" width="40" height="40" src='{{url_for('static', filename="profile.jpeg")}}' alt="">
+                    <h6 class="px-2 text-secondary">{{status_post['name'].capitalize()}} <em class="pl-1">.</em></h6>
+                    <p class="fst-italic">{{ status_post['data'].publish_date.strftime('%d %B, %Y')}}</p>
+                </div>
+                <div class="d-flex flex-row border-bottom border-secondary justify-content-between text-decoration-underline">
+                    <h4 class="card-title">{{status_post['data'].title}}</h4>
+                    <p class="bg-default rounded text-grey p-1">{{ status_post['data'].publish_date.strftime('%d %B %Y') }}</p>
+                </div>
+                <p class="p-2">{{ status_post['data'].content}}</p>    
+            </article>
+            <form  method="POST" action="/news/create-comment">
+                <!-- Description -->
+                    <input type="hidden" class="form-control hidden" id="author_id" value="{{status_post['data'].author_id}}" name="author_id" required>
+                    <input type="hidden" class="form-control hidden" id="post_id" value="{{status_post['data'].post_id}}" name="post_id" required>
+                <div class="form-group">
+                    <label for="comment">Comment:</label>
+                    <textarea rows="10" class="form-control" id="comment"   name="comment" required></textarea>
+                </div> 
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-primary">Create</button>
+            </form>
+            {% endif%}
+        </div>
+    </div>
     {% include "footer.html" %}
 </html>

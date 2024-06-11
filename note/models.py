@@ -29,7 +29,7 @@ class Note(note_db.Model):
 
 # Posts information skeleton
 class Posts(note_db.Model):
-    post_id = note_db.Column(note_db.Integer, primary_key=True)
+    post_id = note_db.Column(note_db.Integer, autoincrement=True, primary_key=True)
     title = note_db.Column(note_db.String(100), nullable = False)
     content = note_db.Column(note_db.Text, nullable = False)
     publish_date = note_db.Column(note_db.DateTime(timezone=True), default=func.now())

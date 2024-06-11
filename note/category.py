@@ -5,13 +5,13 @@ from flask_login import  current_user, login_required
 # internal imports
 from .models import Categories
 from . import note_db
-from .profile import mapper
 
 
 category = Blueprint('categories',__name__)
 
 is_category_updating = False
 
+# fetching all the categories
 @category.route('/get-all-categories')
 @login_required
 def get_all_category():
@@ -21,6 +21,7 @@ def get_all_category():
     return render_template("dashboard.html", all_catagories = all_category, category_update = is_category_updating, category= mapper, user=current_user)
 
 
+# creating a category
 @category.route('/category-added', methods=['POST','GET'])
 @login_required
 def create_category():
@@ -37,6 +38,31 @@ def create_category():
             note_db.session.commit()
 
             return redirect(url_for('categories.get_all_category'))
+
+# Updating a category
+@category.route('/update/<int:id>')
+@login_required
+def get_category_to_update(id):
+    my_category = Categories.query.filter_by(category_id=id).first_or_404()
+    mapper = "categories"
+    is_category_updating = True
+
+    return render_template('dashboard.html', user = current_user, category=mapper, my_categories = my_category, category_updating=is_category_updating)
+
+# updating 
+@category.route('/update/<int:id>/<int:category_num>', methods=['POST'])
+@login_required
+def update_category(id,category_num):
+    my_category = Categories.query.filter_by(category_id=id).first_or_404()
+
+    name = request.form.get('name')
+    description = request.form.get('description')
+
+    my_category.category_name = name
+    my_category.category_description = description
+
+    note_db.session.commit()
+    return redirect(url_for('categories.get_all_category'))
 
 # deleting a category
 @category.route('/delete/<int:id>')

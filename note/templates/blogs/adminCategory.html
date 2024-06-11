@@ -1,22 +1,22 @@
 <div class="container mt-5">
-    {%  if category_updating %}
-        <h1>Update Category</h1>
-        <form  method="POST" action="/note/update/{{noting.id}}/update">
+    {%  if my_categories %}
+        <h1 class="py-2 text-center text-secondary border-top border-primary border-bottom">Update Category</h1>
+        <form  method="POST" action="/category/update/{{my_categories.category_id}}/123409876543212345678">
             <!-- Description -->
             <div class="form-group">
                 <label for="title">Name:</label>
-                <input type="text" class="form-control" id="name" name="name" value="{{category.category_name}}" required>
+                <input type="text" class="form-control" id="name" name="name" value="{{my_categories.category_name}}" required>
             </div> 
             <div class="form-group">
                 <label for="description">Description:</label>
-                <input type="text" class="form-control" id="description"   name="description" value="{{category.category_description}}" required/>
+                <input type="text" class="form-control" id="description"   name="description" value="{{my_categories.category_description}}" required/>
             </div> 
             <!-- Submit Button -->
             <button type="submit" class="btn btn-success">Update category</button>
         </form>
 
     {% else %}
-        <h1>Create Category</h1>
+        <h1 class="py-2 text-center text-secondary border-top border-primary border-bottom">Create Category</h1>
         <form  method="POST" action="/category/category-added">
             <!-- Description -->
             <div class="form-group">
@@ -33,8 +33,8 @@
     {% endif %}
 
     <div class="list-group list-group-flush mt-3" id="Notes">
-        <h1 class="text-decoration-underline">Categories</h1>
-        <table class="table table-bordered table-responsive">
+        <h1 class="py-2 text-center text-secondary border-top border-primary border-bottom">Categories</h1>
+        <table class="table table-responsive table-striped table-hover">
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">Category name</th>
