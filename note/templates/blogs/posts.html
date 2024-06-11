@@ -40,12 +40,12 @@
         {% if user.is_admin %}
             <ul class="list-group list-group-flush mt-3">
                 {% for post in get_all_post %}
-                    <article class="card user-select-auto p-1">
-                        <li class="list-group-item card-body">
+                    <article class="card user-select-auto mb-1">
+                        <li class="list-group-item card-body p-1">
                             <div class="d-flex flex-row border-bottom border-secondary justify-content-between text-decoration-underline">
                                 <h4 class="card-title">{{post.title}}</h4>
                                 <p class="bg-default rounded text-grey p-1">{{ post.publish_date.strftime('%d %B %Y') }}</p>
-                                <span role="contentinfo" class=" btn bg-secondary text-white disabled">{{ post.status.capitalize() }}</span>
+                                <span role="contentinfo" class=" btn text-secondary disabled rounded">{{ post.status.capitalize() }}</span>
                             </div>
                         
                             <p class="card-text py-2">{{ post.content[:300]}} ...</p>
@@ -79,11 +79,11 @@
                             <div class="d-flex flex-row justify-content-between text-decoration-underline">
                                 <h4 class="card-title">{{post.title}}</h4>
                                 <p class="bg-default rounded text-grey p-1">{{ post.publish_date.strftime('%d %B %Y') }}</p>
-                                <mark>{{post.status}}</mark>
+                                <el class="bg-success rounded p-1">{{post.status.capitalize()}}</el>
                             </div>
                             <p class="card-text">{{ post.content}}</p>
                             <a href="/posts/{{post.post_id}}/update" class="btn btn-primary">Edit</a>
-                            <a href="/posts/{{post.post_id}}/delete" class="btn btn-danger">Delete</a>
+                            <a href="/posts/get-delete-post/{{post.post_id}}/{{range(1,40000000)| random}}" class="btn btn-danger">Delete</a>
                         </li>
                     </article>
                 {% endfor%}

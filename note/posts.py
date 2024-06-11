@@ -17,6 +17,7 @@ def get_all_posts():
     all_posts = Posts.query.all()
     return render_template("dashboard.html", category=mapper, get_all_post= all_posts, is_post_update = is_post_updating, user=current_user)
 
+# Creating a post
 @posts.route('/create-post', methods=['POST', 'GET'])
 @login_required
 def create_post():
@@ -29,6 +30,7 @@ def create_post():
 
     return redirect(url_for('posts.get_all_posts'))
 
+# Changing the status of a post that is managed by the administrator 
 @posts.route('/get-detail/<int:id>/changed-status', methods=['POST'])
 @login_required
 def change_status(id):
@@ -40,6 +42,7 @@ def change_status(id):
         note_db.session.commit()
     return redirect(url_for('posts.get_all_posts'))
 
+#  get the details of a post
 @posts.route('/get-detail-of-post/<int:id>/see-more')
 @login_required
 def get_detail_post(id):
@@ -47,6 +50,7 @@ def get_detail_post(id):
     mapper = "status"
     return render_template("dashboard.html", category=mapper, status_post= get_post, is_post_update = is_post_updating, user=current_user)
 
+# post detail and a writer or an author
 @posts.route('/get-post-detail/<int:id>/<int:word>')
 def get_post_detail(id, word):
     get_post = Posts.query.filter_by(post_id = id).first_or_404()
@@ -55,3 +59,15 @@ def get_post_detail(id, word):
     element_post['name'] = author.first_name + ' ' + author.last_name
     element_post['data'] = get_post
     return render_template("/blogs/home.html",is_on_detail = True, status_post = element_post, user=current_user)
+
+# delete a post
+@posts.route('/get-delete-post/<int:id>/<int:extra>')
+@login_required
+def delete_post_by_id(id, extra):
+    deleted_post = Posts.query.filter_by(post_id = id).first_or_404()
+
+    note_db.session.delete(deleted_post)
+    note_db.session.commit()
+
+    return redirect(url_for('posts.get_all_posts'))
+#

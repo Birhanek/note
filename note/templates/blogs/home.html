@@ -48,15 +48,15 @@
             {% else %}
         <!-- /#page-content-wrapper -->
             <article>
-                <div class="d-flex justify-content-start py-1">
+                <div class="d-flex flex-row  justify-content-between text-decoration-underline">
+                    <h4 class="card-title p-1">{{status_post['data'].title}}</h4>
+                </div>
+                <div class="d-flex justify-content-start p-1 border-bottom border-secondary">
                     <img class="rounded-circle pl-1 img-thumbnail" width="40" height="40" src='{{url_for('static', filename="profile.jpeg")}}' alt="">
                     <h6 class="px-2 text-secondary">{{status_post['name'].capitalize()}} <em class="pl-1">.</em></h6>
                     <p class="fst-italic">{{ status_post['data'].publish_date.strftime('%d %B, %Y')}}</p>
                 </div>
-                <div class="d-flex flex-row border-bottom border-secondary justify-content-between text-decoration-underline">
-                    <h4 class="card-title">{{status_post['data'].title}}</h4>
-                    <p class="bg-default rounded text-grey p-1">{{ status_post['data'].publish_date.strftime('%d %B %Y') }}</p>
-                </div>
+                
                 <p class="p-2">{{ status_post['data'].content}}</p>    
             </article>
             <form  method="POST" action="/news/create-comment">
