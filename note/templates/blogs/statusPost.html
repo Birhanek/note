@@ -6,7 +6,7 @@
                 <p class="bg-default rounded text-grey p-1">{{ status_post.publish_date.strftime('%d %B %Y') }}</p>
                 <span role="contentinfo" class=" btn bg-secondary text-white disabled">{{ status_post.status.capitalize() }}</span>
             </div>
-            <p>{{ status_post.content}}</p>
+            <p class="p-1">{{ status_post.content}}</p>
             <form action="/posts/get-detail/{{status_post.post_id}}/changed-status" method="POST">
                 <select name="status" id="status">
                     {% for state in ['pending','approved','rejected'] %}
@@ -19,7 +19,7 @@
             </form>
         </article>
         {% else %}
-        
+
     {% endif %}
 
 

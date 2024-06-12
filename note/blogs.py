@@ -14,7 +14,9 @@ def home():
     for data in all_approved_posts:
         author = User.query.filter_by(id=data.author_id).first_or_404()
         post_data.append({'author':author.first_name + ' ' + author.last_name,'data':data})
+
     return render_template("/blogs/home.html",is_on_detail = on_detail, user=current_user, approved_posts = post_data)
+
 
 @blogs.route('/create-comment', methods=['POST','GET'])
 @login_required
@@ -28,4 +30,16 @@ def post_comment():
 
         note_db.session.add(new_comment)
         note_db.session.commit()
-    return redirect(url_for("posts.get_post_detail",id=post_id,word=3456))
+    return redirect(url_for("posts.get_post_detail", id=post_id, word=3456))
+
+
+@blogs.route('/get-all-comments-by-post/<int:id>')
+def get_comment_by_post(id):
+
+    all_comments = Comments.query.filter_by(post_id = id).all()
+
+    return all_comments
+
+def get_comment_author(id):
+    author = User.query.filter_by(id=id).first_or_404()
+    return author.first_name + ' ' + author.last_name
