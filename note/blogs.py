@@ -12,6 +12,7 @@ def home():
     post_data = []
     all_approved_posts = Posts.query.filter_by(status = 'approved').all()
     for data in all_approved_posts:
+        
         author = User.query.filter_by(id=data.author_id).first_or_404()
         post_data.append({'author':author.first_name + ' ' + author.last_name,'data':data})
 
@@ -21,10 +22,11 @@ def home():
 @blogs.route('/create-comment', methods=['POST','GET'])
 @login_required
 def post_comment():
+
     if request.method == 'POST':
         comment_content = request.form.get('comment')
         post_id = request.form.get('post_id')
-        user_id = request.form.get('user_id')
+        user_id = request.form.get('author_id')
 
         new_comment = Comments(comment = comment_content, post_id=post_id, author_id=user_id)
 
@@ -37,6 +39,8 @@ def post_comment():
 def get_comment_by_post(id):
 
     all_comments = Comments.query.filter_by(post_id = id).all()
+    print(all_comments)
+    print(all_comments)
 
     return all_comments
 

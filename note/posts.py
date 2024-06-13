@@ -16,6 +16,7 @@ is_post_updating = False
 def get_all_posts():
     mapper = 'posts'
     all_posts = Posts.query.all()
+    
     return render_template("dashboard.html", category=mapper, get_all_post= all_posts, is_post_update = is_post_updating, user=current_user)
 
 # Creating a post
@@ -57,16 +58,22 @@ def get_detail_post(id):
 # post detail and a writer or an author
 @posts.route('/get-post-detail/<int:id>/<int:word>')
 def get_post_detail(id, word):
+
     get_post = Posts.query.filter_by(post_id = id).first_or_404()
     author = User.query.filter_by(id = get_post.author_id).first_or_404()
     all_comment_by_post = get_comment_by_post(id)
-    comment_collector = {}
+     
     comment_data_collector = []
+    #  iterate over the comments given for the post to classify 
+    #  the replier and what s/he commented
     for comment in all_comment_by_post:
         comment_author = get_comment_author(comment.author_id)
-        comment_collector['author'] = comment_author
-        comment_collector['comment'] = comment
+        comment_collector = {
+             'author': comment_author,
+             'comment': comment
+         }
         comment_data_collector.append(comment_collector)
+
     element_post = {}
     element_post['name'] = author.first_name + ' ' + author.last_name
     element_post['data'] = get_post

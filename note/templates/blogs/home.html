@@ -58,9 +58,9 @@
                 </div>
                 
                 <p class="p-2">{{ status_post['data'].content}}</p>
-                <ul>
+                <ul class="list-group list-group-flush mt-3">
                     {% for comment in all_comments %}
-                        <li>
+                        <li class="list-group-item">
                             <div class="d-flex justify-content-start py-1">
                                 <img class="rounded-circle pl-1 img-thumbnail" width="40" height="40" src='{{url_for('static', filename="profile.jpeg")}}' alt="">
                                 <h6 class="px-2 text-secondary">{{comment['author'].capitalize()}} <em class="pl-1">.</em></h6>
@@ -73,14 +73,14 @@
             </article>
             <form  method="POST" action="/news/create-comment">
                 <!-- Description -->
-                <input type="hidden" class="form-control hidden" id="author_id" value="{{status_post['data'].author_id}}" name="author_id" required>
+                <input type="hidden" class="form-control hidden" id="author_id" value="{{user.id}}" name="author_id" required>
                 <input type="hidden" class="form-control hidden" id="post_id" value="{{status_post['data'].post_id}}" name="post_id" required>
                 <div class="form-group">
                     <label for="comment">Comment:</label>
                     <textarea rows="10" class="form-control" id="comment"   name="comment" required></textarea>
                 </div> 
                 <!-- Submit Button -->
-                <button type="submit" class="btn btn-primary">Create</button>
+                <button type="submit" class="btn btn-primary">Reply</button>
             </form>
             {% endif%}
         </div>
