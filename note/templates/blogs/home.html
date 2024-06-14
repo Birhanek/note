@@ -58,6 +58,17 @@
                 </div>
                 
                 <p class="p-2">{{ status_post['data'].content}}</p>
+                <form class="border-top border-bottom border-secondary" action="/news/likes/create-like" method="POST">
+                    <input type="hidden" name="post_id" id="like_post_id" value="{{status_post['data'].post_id}}">
+                    <input type="hidden" name="user_id" id="like_user_id" value="{{user.id}}">
+                    <button type="submit" class="btn btn-default d-flex">
+                        <img class="rounded-circle pl-1 img-thumbnail" width="30" height="30" src="{{url_for('static', filename='like.jpeg')}}" alt="like"/>
+                        {% if total_likes > 0 %}
+                        <sub class="badge badge-danger">{{ total_likes }}</sub>
+                        {% endif %}
+                    </button>
+                </form>
+                    
                 <ul class="list-group list-group-flush mt-3">
                     {% for comment in all_comments %}
                         <li class="list-group-item">
@@ -69,19 +80,20 @@
                             <p class="">{{ comment['comment'].comment}}</p>
                         </li>
                     {% endfor %}
-                </ul>  
+                </ul>
+                <form  method="POST" action="/news/create-comment">
+                    <!-- Description -->
+                    <input type="hidden" class="form-control hidden" id="author_id" value="{{user.id}}" name="author_id" required>
+                    <input type="hidden" class="form-control hidden" id="post_id" value="{{status_post['data'].post_id}}" name="post_id" required>
+                    <div class="form-group">
+                        <label for="comment">Comment:</label>
+                        <textarea rows="10" class="form-control" id="comment"   name="comment" required></textarea>
+                    </div> 
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary">Reply</button>
+                </form>
             </article>
-            <form  method="POST" action="/news/create-comment">
-                <!-- Description -->
-                <input type="hidden" class="form-control hidden" id="author_id" value="{{user.id}}" name="author_id" required>
-                <input type="hidden" class="form-control hidden" id="post_id" value="{{status_post['data'].post_id}}" name="post_id" required>
-                <div class="form-group">
-                    <label for="comment">Comment:</label>
-                    <textarea rows="10" class="form-control" id="comment"   name="comment" required></textarea>
-                </div> 
-                <!-- Submit Button -->
-                <button type="submit" class="btn btn-primary">Reply</button>
-            </form>
+            
             {% endif%}
         </div>
     </div>

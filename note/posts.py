@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import  current_user, login_required
 
 # internal imports
-from .models import Posts, User
+from .models import Posts, User,Likes
 from . import note_db
 from .blogs import get_comment_by_post, get_comment_author
 
@@ -61,6 +61,7 @@ def get_post_detail(id, word):
 
     get_post = Posts.query.filter_by(post_id = id).first_or_404()
     author = User.query.filter_by(id = get_post.author_id).first_or_404()
+    total_like = Likes.query.filter_by(post_id = id).all()
     all_comment_by_post = get_comment_by_post(id)
      
     comment_data_collector = []
@@ -81,7 +82,8 @@ def get_post_detail(id, word):
     return render_template("/blogs/home.html",
                            is_on_detail = True, 
                            status_post = element_post, 
-                           all_comments = comment_data_collector, 
+                           all_comments = comment_data_collector,
+                           total_likes = len(total_like),
                            user=current_user)
 
 # delete a post
