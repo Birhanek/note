@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-</body>
     {% include "navbar.html" %}
     <div class="d-flex" id="wrapper">
 
@@ -24,6 +23,7 @@
 
         <!-- Page Content , id="page-content-wrapper"-->
         <div class="w-75 mt-2">
+            
             {% if not is_on_detail %}
             <div class="container">
                 <div class="row">
@@ -68,6 +68,17 @@
                         {% endif %}
                     </button>
                 </form>
+                <form  method="POST" action="/news/create-comment">
+                    <!-- Description -->
+                    <input type="hidden" class="form-control hidden" id="author_id" value="{{user.id}}" name="author_id" required>
+                    <input type="hidden" class="form-control hidden" id="post_id" value="{{status_post['data'].post_id}}" name="post_id" required>
+                    <div class="form-group">
+                        <label for="comment">Comment:</label>
+                        <textarea rows="3" class="form-control" id="comment"   name="comment" required></textarea>
+                    </div> 
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary">Reply</button>
+                </form>
                     
                 <ul class="list-group list-group-flush mt-3">
                     {% for comment in all_comments %}
@@ -81,21 +92,11 @@
                         </li>
                     {% endfor %}
                 </ul>
-                <form  method="POST" action="/news/create-comment">
-                    <!-- Description -->
-                    <input type="hidden" class="form-control hidden" id="author_id" value="{{user.id}}" name="author_id" required>
-                    <input type="hidden" class="form-control hidden" id="post_id" value="{{status_post['data'].post_id}}" name="post_id" required>
-                    <div class="form-group">
-                        <label for="comment">Comment:</label>
-                        <textarea rows="10" class="form-control" id="comment"   name="comment" required></textarea>
-                    </div> 
-                    <!-- Submit Button -->
-                    <button type="submit" class="btn btn-primary">Reply</button>
-                </form>
             </article>
             
             {% endif%}
         </div>
     </div>
     {% include "footer.html" %}
+</body>
 </html>

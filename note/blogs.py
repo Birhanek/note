@@ -10,11 +10,10 @@ on_detail = False
 
 # home 
 @blogs.route('/')
-def home():
+def home(count=3):
     post_data = []
-    all_approved_posts = Posts.query.filter_by(status = 'approved').all()
-    for data in all_approved_posts:
-        
+    all_approved_posts = Posts.query.filter_by(status = 'approved').limit(count).all()
+    for data in all_approved_posts:    
         author = User.query.filter_by(id=data.author_id).first_or_404()
         post_data.append({'author':author.first_name + ' ' + author.last_name,'data':data})
 
@@ -42,9 +41,7 @@ def post_comment():
 def get_comment_by_post(id):
 
     all_comments = Comments.query.filter_by(post_id = id).all()
-    print(all_comments)
-    print(all_comments)
-
+ 
     return all_comments
 
 # get an author that comments on a post
