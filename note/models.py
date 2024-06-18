@@ -16,6 +16,7 @@ class User(note_db.Model, UserMixin):
     is_admin = note_db.Column(note_db.Boolean, default = False)
     notes = note_db.relationship('Note')
     posts = note_db.relationship('Posts')
+    is_banned = note_db.Column(note_db.Boolean, default = False)
 
 
 

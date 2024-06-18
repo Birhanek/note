@@ -26,15 +26,18 @@ def login():
         else:
             user = User.query.filter_by(email = email).first()
             if user:
-                if check_password_hash(user.password, password):
-                    #flash('Logged in successfully!', category='success')
-                    login_user(user, remember=True)
-                    if user.is_admin:
-                        return redirect(url_for('users.user_profile')) 
+                if user.is_banned:
+                    flash('You are banned. Please contact the administrator!', category='error')
+                else:  
+                    if check_password_hash(user.password, password):
+                        #flash('Logged in successfully!', category='success')
+                        login_user(user, remember=True)
+                        if user.is_admin:
+                            return redirect(url_for('users.user_profile')) 
+                        else:
+                            return redirect(url_for( 'views.notes'))
                     else:
-                        return redirect(url_for( 'views.notes'))
-                else:
-                    flash('Either email or password is incorrect. Try again!', category='error')
+                        flash('Either email or password is incorrect. Try again!', category='error')
             else:
                 flash('User with the email does not exist!', category='error')
 

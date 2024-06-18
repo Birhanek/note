@@ -30,6 +30,7 @@ def get_user_to_update(id):
 
     return render_template('dashboard.html', user = current_user, category=mapper, retrieved = my_user, is_updating=update_controller)
 
+# updating a user
 @profile.route('/user/update/<int:id>/<int:word>', methods=['POST'])
 @login_required
 def user_to_update(id, word):
@@ -53,14 +54,17 @@ def user_to_update(id, word):
         update_controller = False
     return redirect (url_for("users.user_profile"))
     
-# deleting a single note
-@profile.route('/user/delete/<int:id>')
+# deleting a single user
+@profile.route('/user/banned/<int:id>')
 @login_required
-def delete_note(id):
+def banned_user(id):
 
     # note = note_db.get_or_404(Note, id)
-    delete_user = User.query.filter_by(id=id).first_or_404()
-    note_db.session.delete(delete_user)
+    banning_user = User.query.filter_by(id=id).first_or_404()
+    if banning_user.is_banned:
+        banning_user.is_banned = False
+    else:
+        banning_user.is_banned = True
     note_db.session.commit()
 
     return redirect(url_for('users.user_profile'))
