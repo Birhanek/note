@@ -8,7 +8,12 @@ from . import note_db
 from .blogs import get_comment_by_post, get_comment_author
 
 posts = Blueprint('posts', __name__)
+
+# this controls are we updating or creating a post
 is_post_updating = False
+
+# this controls the expanding or collapsing of post
+is_collapsed = True
 
 # fetching all posts
 @posts.route('/')
@@ -17,7 +22,12 @@ def get_all_posts():
     mapper = 'posts'
     all_posts = Posts.query.all()
     
-    return render_template("dashboard.html", category=mapper, get_all_post= all_posts, is_post_update = is_post_updating, user=current_user)
+    return render_template("dashboard.html", 
+                           category=mapper, 
+                           get_all_post= all_posts, 
+                           is_post_update = is_post_updating, 
+                           user=current_user,
+                           is_expanding = is_collapsed)
 
 # Creating a post
 @posts.route('/create-post', methods=['POST', 'GET'])
@@ -96,4 +106,42 @@ def delete_post_by_id(id, extra):
     note_db.session.commit()
 
     return redirect(url_for('posts.get_all_posts'))
-#
+
+
+# Get the post before you update a post
+@posts.route('/get-post-for-update/<int:id>/edit')
+@login_required
+def get_post_by_id_to_update(id):
+    get_post = Posts.query.filter_by(post_id = id).first_or_404()
+    mapper = 'posts'
+    print(get_post.content)
+    is_post_updating = True
+
+    return render_template("dashboard.html",
+                           category=mapper, 
+                           set_post= get_post, 
+                           is_post_update = is_post_updating, 
+                           user=current_user)
+
+# Update a post
+@posts.route('/update-<int:longer_id>/<int:id>/updating', methods=['POST'])
+@login_required
+def update_post(longer_id : int, id: int) -> str:
+    global is_post_updating
+    get_post = Posts.query.filter_by(post_id = id).first_or_404()
+
+    if request.method == 'POST':
+        title = request.form.get('title')
+        content = request.form.get('content')
+        get_post.title = title
+        get_post.content = content
+        note_db.session.commit()
+    is_post_updating = False
+    
+    return redirect(url_for('posts.get_all_posts'))
+
+# searching a blog
+@posts.route('/searching')
+def searching_post():
+    searching_word = request.form.get('search')
+    

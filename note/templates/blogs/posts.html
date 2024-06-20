@@ -2,15 +2,15 @@
     {% if not user.is_admin %}
     {%  if is_post_update %}
         <h1 class="py-2 text-center text-secondary border-top border-primary border-bottom">Update Post</h1>
-        <form  method="POST" action="">
+        <form  method="POST" action="/posts/update-{{set_post.post_id **100}}/{{set_post.post_id}}/updating">
             <!-- Description -->
             <div class="form-group">
                 <label for="title">Title:</label>
-                <input type="text" class="form-control" id="title" name="title" required>
+                <input type="text" class="form-control" id="title" name="title" value="{{set_post.title}}" required>
             </div> 
             <div class="form-group">
                 <label for="description">Description:</label>
-                <textarea type="text" class="form-control" id="content"   name="content" required></textarea>
+                <textarea rows="10" type="text" class="form-control" id="content"   name="content" required>{{set_post.content}}</textarea>
 
             </div> 
             <!-- Submit Button -->
@@ -50,22 +50,6 @@
                         
                             <p class="card-text py-2">{{ post.content[:300]}} ...</p>
                             <a href="/posts/get-detail-of-post/{{post.post_id}}/see-more" class="btn btn-primary">See more</a>
-                            
-                            <!-- <select name="status" id="status">
-                                <option value="Pending" {% if post.status == 'pending' %} selected="selected" {% endif %}>
-                                    <a href="/post/{{post.post_id}}/{{pending}}">Pending</a>
-                                </option>
-                                <option value="Approved" {% if post.status == 'approved' %} selected="selected" {% endif %}>
-                                    <a href="/post/{{post.post_id}}/{{approved}}">Approved</a>
-                                </option>
-                                <option value="Rejected" {% if post.status == 'rejected' %} selected="selected" {% endif %}>
-                                    <a href="/post/{{post.post_id}}/{{rejected}}">Rejected</a>
-                                </option>
-                            </select> -->
-
-                            <!-- <a href="/post/{{post.id}}/update" class="btn btn-primary">Edit</a>
-                            <a href="/post/{{post.id}}/delete" class="btn btn-danger">Delete</a> -->
-
                         </li>
                     </article>
                 {% endfor%}
@@ -74,16 +58,16 @@
         {% else %}
             <ul class="list-group list-group-flush mt-3">
                 {% for post in user.posts %}
-                    <article class="card user-select-auto p-1">
+                    <article class="card user-select-auto p-1 mt-1">
                         <li class="list-group-item card-body">
-                            <div class="d-flex flex-row justify-content-between text-decoration-underline">
+                            <div class="d-flex flex-row justify-content-between border-bottom text-decoration-underline">
                                 <h4 class="card-title">{{post.title}}</h4>
                                 <p class="bg-default rounded text-grey p-1">{{ post.publish_date.strftime('%d %B %Y') }}</p>
-                                <el class="bg-success rounded p-1">{{post.status.capitalize()}}</el>
+                                <el class="rounded p-1">{{post.status.capitalize()}}</el>
                             </div>
-                            <p class="card-text">{{ post.content}}</p>
-                            <a href="/posts/{{post.post_id}}/update" class="btn btn-primary">Edit</a>
-                            <a href="/posts/get-delete-post/{{post.post_id}}/{{range(1,40000000)| random}}" class="btn btn-danger">Delete</a>
+                            <p class="card-text">{{ post.content[:200]}} ... </p>
+                            <a href="/posts/get-delete-post/{{post.post_id}}/{{range(1,40000000)| random}}" class=" float-right btn btn-danger mx-1">Delete</a>
+                            <a href="/posts/get-post-for-update/{{post.post_id}}/edit" class="float-right btn btn-primary">Edit</a>
                         </li>
                     </article>
                 {% endfor%}
