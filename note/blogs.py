@@ -10,9 +10,9 @@ on_detail = False
 
 # home 
 @blogs.route('/')
-def home(count=3):
+def home():
     post_data = []
-    all_approved_posts = Posts.query.filter_by(status = 'approved').limit(count).all()
+    all_approved_posts = Posts.query.filter_by(status = 'approved').limit(4).all()
     for data in all_approved_posts:    
         author = User.query.filter_by(id=data.author_id).first_or_404()
         post_data.append({'author':author.first_name + ' ' + author.last_name,'data':data})
@@ -68,4 +68,18 @@ def create_like():
             note_db.session.commit()
     return redirect(url_for("posts.get_post_detail", id=posted_id, word=348886))
 
+# searching a blog
+@blogs.route('/searching', methods=["GET", "POST"])
+def searching_post():
 
+    searching_word = request.form.get('search')
+    blog_search = Posts.query.filter_by(status = "approved").all()
+    
+    post_data = []
+    for data in blog_search:
+        if searching_word in data.title:
+            author = User.query.filter_by(id=data.author_id).first_or_404()
+            post_data.append({'author':author.first_name + ' ' + author.last_name,'data':data})
+    
+    return render_template("/blogs/home.html",is_on_detail = on_detail, user=current_user, approved_posts = post_data)
+    

@@ -140,8 +140,4 @@ def update_post(longer_id : int, id: int) -> str:
     
     return redirect(url_for('posts.get_all_posts'))
 
-# searching a blog
-@posts.route('/searching')
-def searching_post():
-    searching_word = request.form.get('search')
-    
+
