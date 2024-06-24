@@ -1,7 +1,7 @@
 {% if user.is_admin %}
 <div class="d-flex flex-column bg-purple-dark border-right" id="wrapper">   
     <div class="d-flex flex-column h-50 m-4 justify-content-start text-body  align-center rounded text-white">
-        <img class="rounded-circle h-20 w-20" src="{{url_for('static', filename='profile.jpeg')}}" alt=" profile">
+        <img class="rounded-circle h-20 w-20" width="20" height="20" src="{{url_for('static', filename='profile.jpeg')}}" alt=" profile">
         <h3 class="text-center border-top border-default border-bottom text-secondary py-1">{{ user.first_name.upper() + " " + user.last_name.upper()}}</h3>
         <a href="/profile/user/update/{{user.id}}" class="btn btn-success">Edit</a>
     </div>
@@ -16,5 +16,6 @@
 <div class="d-none d-xl-flex flex-column h-50 m-4 justify-content-start  align-center bg-dark rounded text-white">
     <img class="rounded-circle h-20 w-20" src="{{url_for('static', filename='profile.jpeg')}}" alt=" profile">
     <p class="text-center p-4 h4">{{ user.first_name + " " + user.last_name}}</p>
+    <a href="/profile/user/update/{{user.id}}" class="btn btn-success">Edit</a>
 </div>
 {% endif %}

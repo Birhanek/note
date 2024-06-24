@@ -16,6 +16,7 @@
                 <div class="d-none d-xl-flex flex-column h-50 m-4 justify-content-start  align-center bg-dark rounded text-white">
                     <img class="rounded-circle h-20 w-20" src="{{url_for('static', filename='profile.jpeg')}}" alt=" profile">
                     <p class="text-center p-4 h4">{{ user.first_name + " " + user.last_name}}</p>
+                    <a href="/profile/user/update/{{user.id}}" class="btn btn-success">Edit</a>
                 </div>
         
                 <div class="container mt-5">
