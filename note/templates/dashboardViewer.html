@@ -1,7 +1,8 @@
 <div class="container mt-1">
     {% if is_updating %}
     <div class="card-body">
-        <form method="POST" action="/profile/user/update/{{retrieved.id}}/123456098">
+        <h3 class="py-1 rounded w-100 border-top border-bottom border-primary text-center text-secondary">User data update board</h3>
+        <form class="border p-1 w-100" method="POST" action="/profile/user/update/{{retrieved.id}}/123456098">
             <div class="form-group">
                 <label for="firstName">First Name</label>
                 <input type="text" class="form-control" id="firstName" value="{{retrieved.first_name}}" name="firstName" required>
@@ -20,7 +21,7 @@
     {% else %}
         {% if category == "users" %}
             <!-- Table starts here -->
-            <table class="table table-bordered table-responsive">
+            <table class="table table-responsive rounded table-striped table-hover w-100">
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">#</th>
@@ -39,7 +40,8 @@
                         <td>{{ user.last_name }}</td>
                         <td>{{ user.email }}</td>
                         <td>{{ user.is_admin }}</td>
-                        <td><a href="/profile/user/delete/{{user.id}}" class="btn btn-danger">Delete</a></td>
+                        <td><a href="/profile/user/banned/{{user.id}}" class="btn btn-danger">
+                            {% if user.is_banned %} Unlock {% else %} Lock {% endif %}</a></td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -47,6 +49,12 @@
             <!-- Table ends here -->
         {% elif category == "notes" %}
             {% include "adminNotes.html" %}
+        {% elif category == "categories" %}
+            {% include "/blogs/adminCategory.html" %}
+        {% elif category == "posts" %}
+            {% include "/blogs/posts.html" %}
+        {% elif category == "status" %}
+            {% include "/blogs/statusPost.html" %}
         {% endif %}
 
     {% endif %}

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>blogs</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    {% include "navbar.html" %}
+    <div class="d-flex" id="wrapper">
+
+        <!-- Sidebar -->
+        <div class="bg-light border-right w-25" id="sidebar-wrapper">
+            <div class="sidebar-heading">Stationery </div>
+            <div class="list-group list-group-flush">
+                <a href="#" class="list-group-item list-group-item-action bg-light">Overview</a>
+                <!-- Other sidebar items -->
+            </div>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content , id="page-content-wrapper"-->
+        <div class="w-75 mt-2">
+            <form action="/news/searching" class="form-group w-75 d-flex" method="POST">
+                <input class="form-control ml-2" id="search" name="search"/>
+                <button type="submit" class="btn btn-primary mx-1">Search</button>
+            </form>
+            {% if not is_on_detail %}
+            <div class="container">
+                <div class="row">
+                    {% for post in approved_posts %}
+                    <div class="col-sm-12 col-md-12 col-lg-12 py-2 w-100">
+                        <article class="card rounded">
+                            <div class="d-flex justify-content-start py-1">
+                                <img class="rounded-circle pl-1 img-thumbnail" width="40" height="40" src='{{url_for('static', filename="profile.jpeg")}}' alt="">
+                                <h6 class="px-2 text-secondary">{{post['author'].capitalize()}} <em class="pl-1">.</em></h6>
+                                <p class="fst-italic">{{ post['data'].publish_date.strftime('%d %B, %Y')}}</p>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">{{ post['data'].title}}</h5>
+                                <p class="card-text">{{ post['data'].content[:200]}} ... </p>
+                                <a href="/posts/get-post-detail/{{post['data'].post_id}}/{{range(1, 51) | random}}" class="btn btn-primary">See more</a>
+                            </div>
+                        </article>
+                    </div>
+                    {% endfor %}
+              </div>
+            </div>
+            {% else %}
+        <!-- /#page-content-wrapper -->
+            <article>
+                <div class="d-flex flex-row  justify-content-between text-decoration-underline">
+                    <h4 class="card-title p-1">{{status_post['data'].title}}</h4>
+                </div>
+                <div class="d-flex justify-content-start p-1 border-bottom border-secondary">
+                    <img class="rounded-circle pl-1 img-thumbnail" width="40" height="40" src='{{url_for('static', filename="profile.jpeg")}}' alt="">
+                    <h6 class="px-2 text-secondary">{{status_post['name'].capitalize()}} <em class="pl-1">.</em></h6>
+                    <p class="fst-italic">{{ status_post['data'].publish_date.strftime('%d %B, %Y')}}</p>
+                </div>
+                
+                <p class="p-2">{{ status_post['data'].content}}</p>
+                <form class="border-top border-bottom border-secondary" action="/news/likes/create-like" method="POST">
+                    <input type="hidden" name="post_id" id="like_post_id" value="{{status_post['data'].post_id}}">
+                    <input type="hidden" name="user_id" id="like_user_id" value="{{user.id}}">
+                    <button type="submit" class="btn btn-default d-flex">
+                        <img class="rounded-circle pl-1 img-thumbnail" width="30" height="30" src="{{url_for('static', filename='like.jpeg')}}" alt="like"/>
+                        {% if total_likes > 0 %}
+                        <sub class="badge badge-danger">{{ total_likes }}</sub>
+                        {% endif %}
+                    </button>
+                </form>
+                <form  method="POST" action="/news/create-comment">
+                    <!-- Description -->
+                    <input type="hidden" class="form-control hidden" id="author_id" value="{{user.id}}" name="author_id" required>
+                    <input type="hidden" class="form-control hidden" id="post_id" value="{{status_post['data'].post_id}}" name="post_id" required>
+                    <div class="form-group">
+                        <label for="comment">Comment:</label>
+                        <textarea rows="3" class="form-control" id="comment"   name="comment" required></textarea>
+                    </div> 
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary">Reply</button>
+                </form>
+                    
+                <ul class="list-group list-group-flush mt-3">
+                    {% for comment in all_comments %}
+                        <li class="list-group-item">
+                            <div class="d-flex justify-content-start py-1">
+                                <img class="rounded-circle pl-1 img-thumbnail" width="40" height="40" src='{{url_for('static', filename="profile.jpeg")}}' alt="">
+                                <h6 class="px-2 text-secondary">{{comment['author'].capitalize()}} <em class="pl-1">.</em></h6>
+                                <p class="fst-italic">{{ comment['comment'].time_stamp.strftime('%d %B, %Y')}}</p>
+                            </div>
+                            <p class="">{{ comment['comment'].comment}}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </article>
+            
+            {% endif%}
+        </div>
+    </div>
+    {% include "footer.html" %}
+</body>
+</html>

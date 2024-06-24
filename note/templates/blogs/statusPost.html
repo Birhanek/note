@@ -1,0 +1,26 @@
+<div class="container mt-5">
+    {% if user.is_admin %}
+        <article>
+            <div class="d-flex flex-row border-bottom border-secondary justify-content-between text-decoration-underline">
+                <h4 class="card-title">{{status_post.title}}</h4>
+                <p class="bg-default rounded text-grey p-1">{{ status_post.publish_date.strftime('%d %B %Y') }}</p>
+                <span role="contentinfo" class=" btn bg-secondary text-white disabled">{{ status_post.status.capitalize() }}</span>
+            </div>
+            <p class="p-1">{{ status_post.content}}</p>
+            <form action="/posts/get-detail/{{status_post.post_id}}/changed-status" method="POST">
+                <select name="status" id="status">
+                    {% for state in ['pending','approved','rejected'] %}
+                    <option value="{{state}}">{{ state.capitalize()}}</option>
+                    {% endfor %}
+                    <!-- <option value="Approved">Approved</option>
+                    <option value="Rejected">Rejected</option> -->
+                </select>
+                <button type="submit" class="btn btn-primary">Update Status</button>
+            </form>
+        </article>
+        {% else %}
+
+    {% endif %}
+
+
+</div>
