@@ -1,6 +1,7 @@
 # External imports
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import  current_user, login_required
+from sqlalchemy import func, extract
 
 # internal imports
 from .models import Posts, User,Likes
@@ -20,13 +21,33 @@ is_collapsed = True
 @login_required
 def get_all_posts():
     mapper = 'posts'
+    # fetching all post 
     all_posts = Posts.query.all()
+
+    # Fetch the results
+    results = note_db.session.query(
+        extract('year', Posts.publish_date).label('year'),
+        extract('month', Posts.publish_date).label('month'),
+        extract('day', Posts.publish_date).label('day'),
+        func.count(Posts.publish_date)).group_by('year', 'month', 'day').all()
     
+    # Process the results similarly
+    labels = []
+    data =[]
+
+    # extraction of year, month and day and concatinate it together
+    for year, month, day,post_count in results:
+        formatted_date = f"{year:04d}-{month:02d}-{day:02d}"
+        data.append(post_count)
+        labels.append(formatted_date)
+
     return render_template("dashboard.html", 
                            category=mapper, 
                            get_all_post= all_posts, 
                            is_post_update = is_post_updating, 
                            user=current_user,
+                           label = labels,
+                           chart_data = data,
                            is_expanding = is_collapsed)
 
 # Creating a post
@@ -117,9 +138,28 @@ def get_post_by_id_to_update(id):
     print(get_post.content)
     is_post_updating = True
 
+     # Fetch the results
+    results = note_db.session.query(
+        extract('year', Posts.publish_date).label('year'),
+        extract('month', Posts.publish_date).label('month'),
+        extract('day', Posts.publish_date).label('day'),
+        func.count(Posts.publish_date)).group_by('year', 'month', 'day').all()
+    
+    # Process the results similarly
+    labels = []
+    data =[]
+
+    # extraction of year, month and day and concatinate it together
+    for year, month, day,post_count in results:
+        formatted_date = f"{year:04d}-{month:02d}-{day:02d}"
+        data.append(post_count)
+        labels.append(formatted_date)
+
     return render_template("dashboard.html",
                            category=mapper, 
                            set_post= get_post, 
+                           label = labels,
+                           chart_data = data,
                            is_post_update = is_post_updating, 
                            user=current_user)
 
