@@ -1,5 +1,6 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for, send_file
+from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import  current_user, login_required
+from sqlalchemy import desc
 
 from .models import Posts, User,Comments,Likes
 from . import note_db
@@ -12,7 +13,7 @@ on_detail = False
 @blogs.route('/')
 def home():
     post_data = []
-    all_approved_posts = Posts.query.filter_by(status = 'approved').limit(4).all()
+    all_approved_posts = Posts.query.filter_by(status = 'approved').order_by(desc(Posts.publish_date)).limit(4).all()
     for data in all_approved_posts:    
         author = User.query.filter_by(id=data.author_id).first_or_404()
         post_data.append({'author':author.first_name + ' ' + author.last_name,'data':data})
@@ -73,7 +74,7 @@ def create_like():
 def searching_post():
 
     searching_word = request.form.get('search')
-    blog_search = Posts.query.filter_by(status = "approved").all()
+    blog_search = Posts.query.filter_by(status = "approved").order_by(desc(Posts.publish_date)).all()
     
     post_data = []
     for data in blog_search:

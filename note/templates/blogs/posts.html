@@ -38,6 +38,10 @@
     <div class="list-group list-group-flush mt-3">
         <h1 class="py-2 text-center text-secondary border-top border-primary border-bottom">Posts</h1>
         {% if user.is_admin %}
+        <!--  This draw the number of posts per day -->
+            <div style="height: 50vh; width: 100%;">
+                <canvas id="myChart"></canvas>
+            </div>
             <ul class="list-group list-group-flush mt-3">
                 {% for post in get_all_post %}
                     <article class="card user-select-auto mb-1">
@@ -75,5 +79,30 @@
             </ul>
         {% endif %}
         
-    </div> 
+    </div>
+    <!-- This script is for drawing the number of posts per day -->
+    <script>
+        const labels = {{ label | tojson }};
+ 
+        const data = {
+            labels: labels,
+            datasets: [{
+                label: 'Posts per day',
+                backgroundColor: 'rgb(0, 0, 255)',
+                data: {{ chart_data | tojson }}
+            }]
+        };
+ 
+        const config = {
+            type: 'bar',
+            data: data,
+            options: { maintainAspectRatio: false }
+        };
+ 
+        const myChart = new Chart(
+            document.getElementById('myChart'),
+            config
+        );
+ 
+    </script> 
 </div>
