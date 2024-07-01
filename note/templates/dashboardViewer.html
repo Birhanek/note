@@ -40,8 +40,8 @@
                         <td>{{ user.last_name }}</td>
                         <td>{{ user.email }}</td>
                         <td>{{ user.is_admin }}</td>
-                        <td><a href="/profile/user/banned/{{user.id}}" class="btn btn-danger">
-                            {% if user.is_banned %} Unlock {% else %} Lock {% endif %}</a></td>
+                        <td><a href="/profile/user/banned/{{user.id}}" class="btn">
+                            {% if user.is_banned %} <strong class="btn btn-danger">Unlock</strong> {% else %} <strong class="btn btn-success">Lock</strong> {% endif %}</a></td>
                     </tr>
                     {% endfor %}
                 </tbody>

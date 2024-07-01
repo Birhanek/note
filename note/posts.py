@@ -88,8 +88,7 @@ def get_detail_post(id):
 
 # post detail and a writer or an author
 @posts.route('/get-post-detail/<int:id>/<int:word>')
-def get_post_detail(id, word):
-
+def get_post_detail(id, word:str):
     get_post = Posts.query.filter_by(post_id = id).first_or_404()
     author = User.query.filter_by(id = get_post.author_id).first_or_404()
     total_like = Likes.query.filter_by(post_id = id).all()
@@ -105,11 +104,18 @@ def get_post_detail(id, word):
              'comment': comment
          }
         comment_data_collector.append(comment_collector)
+    # count the minutes we need to read the article
+    word_count_per_minute = 150
+    word_count = len(get_post.content.split())
+    print(word_count)
+    duration_to_read = word_count // word_count_per_minute
 
+    # creating a dictionary to contain 
     element_post = {}
     element_post['name'] = author.first_name + ' ' + author.last_name
     element_post['data'] = get_post
-    print(element_post)
+    element_post['duration'] = duration_to_read
+
     return render_template("/blogs/home.html",
                            is_on_detail = True, 
                            status_post = element_post, 
